@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link type="text/css" rel="stylesheet" href="dist/css/styles.css" />
+</head>
+<body data-ng-app="weather-search">
+
+<div data-ng-controller="weatherSearch as weather" data-ng-cloak>
+
+    <form data-ng-submit="weather.searchWeather()">
+        <p>
+            <label for="city">Search by City:</label> <input id="city" type="text" data-ng-model="weather.city" />
+        </p>
+        <p>
+            <label for="units">Units:</label>
+            <select id="units" data-ng-model="weather.units">
+                <option value="metric" selected>Celcius</option>
+                <option value="imperial" selected>Fahrenheit</option>
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="Search" />
+        </p>
+    </form>
+
+    <hr/>
+
+    <div data-ng-show="weather.results.city">
+        <h2>Results for {{weather.results.city}}, {{weather.results.country}}</h2>
+
+        <static-map
+                data-location="{{weather.results.city}},{{weather.results.country}}"
+                data-width="640"
+                data-height="300"
+                data-zoom="13"
+                data-maptype="roadmap"></static-map>
+
+        <article data-ng-repeat="day in weather.results.listGrouped">
+            <h2>{{day[0].dt_obj | date: 'fullDate'}}</h2>
+
+            <div class="table-grid" data-ng-repeat="forecast in day">
+                <div class="col-1-4">
+                    {{forecast.dt_obj | date: 'shortTime'}}
+                </div>
+                <div class="col-1-4">
+                    <img data-ng-src="http://openweathermap.org/img/w/{{forecast.weather[0].icon}}.png" />
+                    <p>{{forecast.weather[0].main}}</p>
+                </div>
+                <div class="col-1-2">
+                    High: {{forecast.main.temp_max}} <sup>o</sup>{{::weather.units === 'metric' ? 'C' : 'F'}}<br/>
+                    Low: {{forecast.main.temp_min}} <sup>o</sup>{{::weather.units === 'metric' ? 'C' : 'F'}}<br/>
+                    Humidity: {{forecast.main.humidity}}%<br/>
+                    Wind: {{forecast.wind.speed}} {{::weather.units === 'metric' ? 'meter/sec' : 'miles/hour'}}<br/>
+                </div>
+            </div>
+        </article>
+
+        <hr/>
+
+    </div>
+</div>
+
+<script src="dist/js/bundled.js"></script>
+
+</body>
+</html>
