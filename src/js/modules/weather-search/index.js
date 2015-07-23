@@ -14,3 +14,4 @@ angular.module('weather-search', [
 
 require('./controllers/weatherSearch');
 require('./services/weatherSearch');
+require('./constants/apikey');

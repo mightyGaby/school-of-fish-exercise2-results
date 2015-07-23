@@ -8,7 +8,7 @@
      * Service for searching the weather by location
      */
     angular.module('weather-search')
-        .service('weatherSearchService', ['$http', '$filter', function($http, $filter){
+        .service('weatherSearchService', ['$http', '$filter', 'apikeyConstant', function($http, $filter, apikeyConstant){
 
             /**
              * @ngdoc property
@@ -30,7 +30,7 @@
              * @returns {string} API key
              * @private
              */
-            var _APIKey = 'a03414aadd7f17cd1a79948b90cc5647';
+            var _APIKey = apikeyConstant.apikey;
 
             /**
              * @ngdoc method
@@ -43,7 +43,7 @@
             function groupByDate(list){
                 var newList = {};
                 angular.forEach(list, function(val){
-                    var date = new Date(val.dt_txt);
+                    var date = new Date(val.dt * 1000);
                     var idx = $filter('date')(date, 'yyyy-MM-dd');
                     newList[idx] = newList[idx] || [];
                     val.dt_obj = date;
